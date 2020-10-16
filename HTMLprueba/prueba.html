@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <title> GitHub Searcher</title>
+
+    <style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+    .apartado{
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        margin: 20px;
+        padding: 20px;
+
+    }
+    .destacado{
+        font-size: 100%;
+        color: tomato;
+        font-family: Comics Sans MS;
+
+</style>
+</head>
+
+<body>
+<div class= "apartado">
+    <h2> GitHub Searcher <span class="destacado">By AbelOrPa</span> &#128521</h2>
+    <p> Let's go to look for the repositories of some user. </p>
+    <p> GitHub Username: <input type="text" id="username" value=""></p>
+    <button id="btn1"> Obten nombre usuario </button>
+    <button id="btn2"> Dame datos del usuario obtenido  </button>
+    <p> </p>
+    <p id="user">Usuario a buscar: </p>
+</div>
+
+<div class = "tablainfo">
+    <h2 id="titulo" align="center">Tabla con los datos del usuario buscado</h2>
+    <table class="tabla" id="infouser">
+        <thead>
+        <tr>
+            <th>Nombre del repositorio</th>
+            <th>Descripción del repositorio</th>
+            <th>Numero de Seguidores</th>
+        </tr>
+        </thead>
+        <tbody id="repositorios">
+
+        </tbody>
+    </table>
+</div>
+
+</body>
+
+<script>
+    var usuario;
+    $(document).ready(function(){
+
+        $("#btn1").click(function(){
+            usuario = $("#username").val();
+            $("#user").text("Usuario a buscar : " + usuario);
+
+
+
+        });
+    });
+    $(document).ready(function(){
+        $("#btn2").click(function(){
+            $("#repositorios").empty();
+            usuario = $("#username").val();
+            $("#titulo").text("Tabla con los datos del usuario " + usuario);
+            $.get("https://api.github.com/users/"+ usuario+'/repos', function(data){
+                for(i=0;i<data.length;i++){
+
+                    $("#repositorios").append('<tr>');
+
+                    $("#repositorios").append('<td>' +data[i].name +'</td>' );
+
+                    if (data[i].description==null){
+                        $("#repositorios").append('<td>-</td>' );}
+                    else{
+                        $("#repositorios").append('<td>' +data[i].description +'</td>' );
+                    }
+
+                    $("#repositorios").append('<td>' +data[i].watchers +'</td>' );
+
+                    $("#repositorios").append('</tr>');
+                    }
+
+                });
+
+
+        });
+    });
+
+
+
+    </script>
+</html>
